@@ -1,0 +1,121 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Produit
+{% endblock %}
+
+{% block h1 %}
+	Produit
+{% endblock %}
+
+
+{% block body %}
+
+	<div class="container">
+
+		<div class="container">
+
+			<a class="btn btn-dark my-3" href="{{ path('app_produit') }}">Retour</a>
+
+
+			<div class="row">
+				<div class="col-md-6">
+					{% if produit.image %}
+						<img src="{{asset('images/'~produit.image)}}" width="80%" class="img300" alt="">
+					{% else %}
+						<img src="{{ asset('images/imageDefault.jpg') }}" alt="" width="100%" class="img300">
+					{% endif %}
+				</div>
+
+				<div class="col-md-6">
+
+					<strong>Produit N° :
+					</strong>
+					{{ produit.id }}
+
+					<h1>{{ produit.titre|capitalize }}</h1>
+
+					<strong>Prix :
+					</strong>
+					{{ produit.prix }}€
+					<br/><br/>
+
+					<strong>Taille :
+					</strong>
+					{{ produit.taille }}
+					<br/><br/>
+
+					<strong>Couleur :
+					</strong>
+					<div style="background-color:{{ produit.color  }}; width:40px; height:40px; border-redius:50%"></div>
+					<br/><br/>
+
+					<strong>Description :
+					</strong>
+					<p>
+						{% if produit.description %}
+							{{ produit.description|capitalize }}
+						{% else %}
+							<span class="text-danger fst-italic">
+								Aucune description</span>
+						{% endif %}
+
+					</p>
+					<br/><br/>
+
+					<strong>Date d'enregistrement :
+					</strong>
+					{{ produit.enregistrementAt|date("d F Y H:i:s") }}
+
+					<br/><br/><br/><br/>
+
+
+					<div>
+
+						{% if produit.stock %}
+
+							<form action="{{ path('panier_ajouter') }}" method="post">  
+
+
+								<label for="qt">Quantité :</label>
+								<select name="quantity" class="form-control" id="qt">
+									{% if produit.stock > 10 %}
+										{% set quantity = 10 %}
+									{% else %}
+										{% set quantity =  produit.stock  %}
+									{% endif %}
+									{% for i in 1.. quantity %}
+										<option value="{{ i }}">{{ i }}</option>
+									{% endfor %}
+
+								</select>
+								<input type="hidden" name="produit" value="{{ produit.id }}">
+								<button type="submit" class="btn btn-success col-12 mt-2">Ajouter au pannier
+									<i class="bi bi-cart2 text-white"></i>
+								</button>
+
+
+							</form>
+
+						{% else %}
+
+							<h4>Rupture de stock</h4>
+
+						{% endif %}
+
+
+					</div>
+
+
+				</div>
+
+			</div>
+			
+
+		</div>
+		
+
+	</div>
+
+
+</div>{% endblock %}

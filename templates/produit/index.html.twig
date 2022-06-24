@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos produits
+{% endblock %}
+
+{% block h1 %}Nos produits
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+
+		<h1 class="text-center mt-5">Nos produits</h1>
+		<hr class="mb-5">
+
+			<div class="" style="display: grid; grid-template-columns: repeat(4, 0fr); column-gap: 25px; row-gap: 25px;">
+				{% if produits %}
+					{% for produit in produits %}
+						<div class="card " style="width: 18rem; border-redius:none !important;">
+
+							{% if produit.image %}
+								<img src="{{asset('images/'~produit.image)}}" class="card-img-top" alt="">
+							{% else %}
+								<img src="{{ asset('images/imageDefault.jpg') }}" class="card-img-top" alt="..." style=" border-redius:0 !important;">
+							{% endif %}
+
+
+							<div class="card-body text-center">
+								<h5 class="card-title">{{ produit.titre | capitalize }}</h5>
+								<hr>
+								<h6 class="card-title">{{ produit.prix }}€</h6>
+								<a href="{{ path('fiche_produit', {'id' : produit.id}) }}" class="btn btn-primary col-12">Voir</a>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<h4 class="text-center text-danger">Auccun résulat</h4>
+				{% endif %}
+			</div>
+
+		
+
+
+	{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1 class="text-center">Mon panier</h1>
+
+		{% for notification in app.flashes('success') %}
+			<div class="col-md-6 mx-auto text-center alert alert-success">
+				{{ notification }}
+			</div>
+		{% endfor %}
+
+
+		{% if app.session.get('panier') and panier.id is defined and panier.id | length > 0 %}
+
+
+			<table class="table table-striped table-hover text-center mt-3">
+
+				<thead class="bg-dark text-white">
+					<tr>
+						<th>ID</th>
+						<th>Titre</th>
+						<th>Prix (€)</th>
+						<th>Quantité</th>
+						<th>Total</th>
+						<th>Supprimer</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{% set size = panier.id | length -1 %}
+					{% for i in 0..size %}
+						<tr>
+							<td>{{ panier.id[i] }}</td>
+							<td>{{ panier.titre[i] }}</td>
+							<td>{{ panier.prix[i] }}</td>
+							<td>
+								{% if panier.quantity[i] %}
+									{{ panier.quantity[i] }}
+								{% else %}
+									<span class="text-warning">Indisponible pour le moment</span>
+								{% endif %}
+
+
+							</td>
+							<td>{{ panier.prix[i] * panier.quantity[i] }}</td>
+							<td>
+								<a href="{{ path('panier_retirer' , {'id' : panier.id[i]}) }}">
+									<i class="bi bi-trash3 text-danger fs-4 "></i>
+								</a>
+							</td>
+						</tr>
+
+					{% endfor %}
+					<tr>
+						<td colspan="4">
+							<strong>Montan total :</strong>
+						</td>
+						<td>
+							<strong>{{ montant }}
+								€</strong>
+						</td>
+					</tr>
+				</tbody>
+
+
+			</table>
+
+			<a class="btn btn-danger" href="{{ path('panier_vider') }}">Vider le panier</a>
+
+			{% if app.user %}
+				<a class="btn btn-success" href="{{ path('panier_payer') }}">Payer</a>
+			{% else %}
+				<h5 class="text-center mt-4">Pour passer la commande veuillez vous
+					<a href="{{ path('app_login') }}">connecter</a>
+					ou vous
+					<a href="{{ path('app_register') }}">Inscrir</a>
+				</h5>
+			{% endif %}
+
+		{% else %}
+			<h3 class="text-center mt-5 text-info fst-italic">
+				Votre panier est vide
+            </h3>
+		{% endif %}
+
+	</div>
+{% endblock %}
